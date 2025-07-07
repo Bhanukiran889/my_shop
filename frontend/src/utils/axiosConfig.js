@@ -3,6 +3,7 @@ import axios from "axios";
 
 const api = axios.create({
   baseURL: "https://my-shop-xr30.onrender.com/api", 
+  withCredentials: true, // Enable cookies to be sent with requests
 });
 
 api.interceptors.request.use((config) => {

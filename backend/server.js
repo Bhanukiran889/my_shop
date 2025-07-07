@@ -10,7 +10,7 @@ const app = express();
 
 // ✅ CORS config must include credentials for cookies to work
 app.use(cors({
-  origin: "http://localhost:5173", // 🔁 or your frontend deployed URL
+  origin: "http://localhost:5174", // 🔁 or your frontend deployed URL
   credentials: true,
 }));
 
