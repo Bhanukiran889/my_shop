@@ -1,15 +1,8 @@
-// src/utils/axiosConfig.js
-import axios from "axios";
+import axios from 'axios';
 
 const api = axios.create({
-  baseURL: "https://my-shop-xr30.onrender.com/api", 
-  withCredentials: true, // Enable cookies to be sent with requests
-});
-
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
-  if (token) config.headers.Authorization = `Bearer ${token}`;
-  return config;
+  baseURL: 'http://localhost:5000/api',
+  withCredentials: true,
 });
 
 export default api;

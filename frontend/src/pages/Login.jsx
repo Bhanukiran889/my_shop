@@ -16,7 +16,7 @@ const Login = () => {
     e.preventDefault();
     setError('');
     try {
-      await axios.post('/auth/login', form); // sets cookie
+      await axios.post('auth/login', form); // sets cookie
 
       const me = await axios.get('/auth/me'); // get user role from cookie
       setAuth({ isAuthenticated: true, role: me.data.role });

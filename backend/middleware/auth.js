@@ -1,9 +1,10 @@
 // middleware/auth.js
 const jwt = require('jsonwebtoken');
 
-// verifyToken middleware
+// Middleware to verify JWT from cookies
 const verifyToken = (req, res, next) => {
-  const token = req.headers.authorization?.split(" ")[1];
+  const token = req.cookies?.token; 
+
   if (!token) return res.status(403).json({ message: "No token provided" });
 
   try {
@@ -15,7 +16,7 @@ const verifyToken = (req, res, next) => {
   }
 };
 
-// verifyAdmin middleware
+// Middleware to allow only admin users
 const verifyAdmin = (req, res, next) => {
   verifyToken(req, res, () => {
     if (req.user?.role === 'admin') {
