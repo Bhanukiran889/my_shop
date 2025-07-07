@@ -1,14 +1,13 @@
-import { createContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from '../utils/axiosConfig';
-
-export const AuthContext = createContext();
+import { AuthContext } from './AuthContext';
 
 export const AuthProvider = ({ children }) => {
   const [auth, setAuth] = useState({ isAuthenticated: false, role: null });
 
   const checkAuth = async () => {
     try {
-      const res = await axios.get('/auth/me'); // Backend should verify JWT in cookie
+      const res = await axios.get('/auth/me');
       setAuth({ isAuthenticated: true, role: res.data.role });
     } catch {
       setAuth({ isAuthenticated: false, role: null });

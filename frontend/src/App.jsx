@@ -5,10 +5,14 @@ import Register from './pages/Register';
 import Cart from './pages/Cart';
 import AdminPanel from './pages/AdminPanel';
 import ProtectedRoute from './components/ProtectedRoute';
+import Navbar from './components/Navbar';
+
+import './App.css'; 
 
 function App() {
   return (
     <Router>
+      <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
