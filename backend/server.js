@@ -10,7 +10,7 @@ const app = express();
 
 // ✅ CORS config must include credentials for cookies to work
 app.use(cors({
-  origin: "https://my-shop-self-sigma.vercel.app/", // 🔁 or your frontend deployed URL
+  origin: "https://my-shop-self-sigma.vercel.app", // 🔁 or your frontend deployed URL
   credentials: true,
 }));
 
