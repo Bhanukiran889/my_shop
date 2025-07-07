@@ -1,40 +1,31 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
-import axios from '../utils/axiosConfig';
 
 const Navbar = () => {
   const { auth, setAuth } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const handleLogout = async () => {
-    try {
-      await axios.post('/auth/logout'); // Backend should clear cookie
-      setAuth({ isAuthenticated: false, role: null });
-      navigate('/login');
-    } catch (err) {
-      console.error('Logout error:', err);
-    }
+  const handleLogout = () => {
+    // Optional: Hit /auth/logout route to clear cookie
+    setAuth({ isAuthenticated: false, role: '' });
+    navigate('/login');
   };
 
   return (
-    <nav className="flex items-center justify-between px-6 py-3 bg-blue-600 text-white">
-      <Link to="/" className="text-xl font-bold">🛒 Shop</Link>
-
-      <div className="flex gap-4 items-center">
-        <Link to="/">Home</Link>
-        {auth.isAuthenticated && <Link to="/cart">Cart</Link>}
-        {auth.role === 'admin' && <Link to="/admin">Admin</Link>}
-
-        {!auth.isAuthenticated ? (
+    <nav className="flex justify-between p-4 bg-gray-800 text-white">
+      <Link to="/">Home</Link>
+      <div className="space-x-4">
+        {auth.isAuthenticated ? (
           <>
-            <Link to="/login">Login</Link>
-            <Link to="/register">Register</Link>
+            {auth.role === 'admin' && <Link to="/admin">Admin</Link>}
+            <button onClick={handleLogout}>Logout</button>
           </>
         ) : (
-          <button onClick={handleLogout} className="bg-red-500 px-3 py-1 rounded">
-            Logout
-          </button>
+          <>
+            <Link to="/register">Register</Link>
+            <Link to="/login">Login</Link>
+          </>
         )}
       </div>
     </nav>

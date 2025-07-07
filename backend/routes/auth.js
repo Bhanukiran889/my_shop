@@ -24,7 +24,7 @@ router.post("/register", async (req, res) => {
   }
 });
 
-// Login
+// Login and set token in cookie
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
@@ -41,19 +41,40 @@ router.post("/login", async (req, res) => {
       { expiresIn: "1d" }
     );
 
-    res.json({ token, role: user.role });
+    // Set the token in cookie
+    res
+      .cookie("token", token, {
+        httpOnly: true,
+        sameSite: "strict",
+        secure: process.env.NODE_ENV === "production", // set true on render
+        maxAge: 24 * 60 * 60 * 1000,
+      })
+      .json({ role: user.role }); // Send role separately
   } catch (error) {
     res.status(500).json({ error: "Login error" });
   }
 });
 
-router.post('/logout', (req, res) => {
-  res.clearCookie('token', {
-    sameSite: "none",
-    secure: true,
+// Logout
+router.post("/logout", (req, res) => {
+  res.clearCookie("token", {
+    sameSite: "strict",
+    secure: process.env.NODE_ENV === "production",
   });
   res.json({ message: "Logged out" });
 });
 
+// Get current user info from cookie
+router.get("/me", (req, res) => {
+  const token = req.cookies.token;
+  if (!token) return res.status(401).json({ error: "Not authenticated" });
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    res.json({ role: decoded.role });
+  } catch (err) {
+    res.status(401).json({ error: "Invalid token" });
+  }
+});
 
 module.exports = router;
