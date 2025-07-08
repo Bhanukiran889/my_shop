@@ -8,18 +8,18 @@ dotenv.config();
 
 const app = express();
 
-// ✅ CORS config must include credentials for cookies to work
+//  CORS config must include credentials for cookies to work
 app.use(cors({
-  origin: "https://my-shop-self-sigma.vercel.app", // 🔁 or your frontend deployed URL
+  origin: "https://my-shop-self-sigma.vercel.app", 
   credentials: true,
 }));
 
 app.use(express.json());
 
-// ✅ cookie-parser should be BEFORE your routes
+//  cookie-parser should be BEFORE your routes
 app.use(cookieParser());
 
-// ✅ Routes
+//  Routes
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/products", require("./routes/products"));
 app.use("/api/cart", require("./routes/cart")); 
