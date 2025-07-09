@@ -6,11 +6,19 @@ const Navbar = () => {
   const { auth, setAuth } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    // Optional: Hit /auth/logout route to clear cookie
-    setAuth({ isAuthenticated: false, role: "" });
+  const handleLogout = async () => {
+  try {
+    await fetch("http://localhost:5000/api/auth/logout", {
+      method: "POST",
+      credentials: "include", // required to send cookies
+    });
+  } catch (err) {
+    console.error("Logout failed:", err);
+  } finally {
+    setAuth({ isAuthenticated: false, role: null });
     navigate("/login");
-  };
+  }
+};
 
   return (
     <nav className="flex justify-between p-4 bg-gray-800 text-white">
