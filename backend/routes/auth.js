@@ -44,7 +44,7 @@ router.post("/login", async (req, res) => {
     res
       .cookie("token", token, {
         httpOnly: true,
-        sameSite: "Lax", // Strict is too aggressive; Lax works well for most apps
+        sameSite: "none", // Strict is too aggressive; Lax works well for most apps
         secure: process.env.NODE_ENV === "production", // true only in production (HTTPS)
         maxAge: 24 * 60 * 60 * 1000, // 1 day
       })
@@ -58,7 +58,7 @@ router.post("/login", async (req, res) => {
 router.post("/logout", (req, res) => {
   res.clearCookie("token", {
     httpOnly: true,
-    sameSite: "Lax",
+    sameSite: "none",
     secure: process.env.NODE_ENV === "production",
   });
   res.json({ message: "Logged out" });
