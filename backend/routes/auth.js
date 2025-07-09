@@ -41,37 +41,37 @@ router.post("/login", async (req, res) => {
       { expiresIn: "1d" }
     );
 
-    // Set the token in cookie
     res
       .cookie("token", token, {
         httpOnly: true,
-        sameSite: "Lax", // Use 'strict' if you want to restrict cross-site requests
-        secure: process.env.NODE_ENV === "production", // set true on render
-        maxAge: 24 * 60 * 60 * 1000,
+        sameSite: "Lax", // Strict is too aggressive; Lax works well for most apps
+        secure: process.env.NODE_ENV === "production", // true only in production (HTTPS)
+        maxAge: 24 * 60 * 60 * 1000, // 1 day
       })
-      .json({ role: user.role }); // Send role separately
+      .json({ role: user.role }); // Optional: send role to frontend
   } catch (error) {
     res.status(500).json({ error: "Login error" });
   }
 });
 
-// Logout
+// Logout and clear cookie
 router.post("/logout", (req, res) => {
   res.clearCookie("token", {
-    sameSite: "strict",
+    httpOnly: true,
+    sameSite: "Lax",
     secure: process.env.NODE_ENV === "production",
   });
   res.json({ message: "Logged out" });
 });
 
-// Get current user info from cookie
+// Auth check route
 router.get("/me", (req, res) => {
-  const token = req.cookies.token;
+  const token = req.cookies?.token;
   if (!token) return res.status(401).json({ error: "Not authenticated" });
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    res.json({ role: decoded.role });
+    res.json({ role: decoded.role, id: decoded.id });
   } catch (err) {
     res.status(401).json({ error: "Invalid token" });
   }
