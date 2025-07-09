@@ -21,6 +21,7 @@ function Home() {
       alert("Failed to add to cart. Maybe you're not logged in?");
     }
   };
+  
 
   return (
     <div className="p-4 flex flex-col items-center">
