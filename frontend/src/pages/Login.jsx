@@ -1,6 +1,6 @@
 import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from '../utils/axiosConfig';
+// import axios from '../utils/axiosConfig';
 import { AuthContext } from '../context/AuthContext';
 
 const Login = () => {
@@ -12,20 +12,25 @@ const Login = () => {
   const handleChange = e =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
-  const handleSubmit = async e => {
-    e.preventDefault();
-    setError('');
-    try {
-      await axios.post('auth/login', form); // sets cookie
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+  try {
+    const res = await fetch("http://localhost:5000/api/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include", // important to include cookies!
+      body: JSON.stringify({ email: form.email, password: form.password }),
+    });
 
-      const me = await axios.get('/auth/me'); // get user role from cookie
-      setAuth({ isAuthenticated: true, role: me.data.role });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || "Login failed");
 
-      navigate(me.data.role === 'admin' ? '/admin' : '/');
-    } catch (err) {
-      setError(err.response?.data?.error || 'Login failed');
-    }
-  };
+    setAuth({ isAuthenticated: true, role: data.role });
+    navigate(data.role === "admin" ? "/admin" : "/");
+  } catch (err) {
+    setError(err.message);
+  }
+};
 
   return (
     <div className="max-w-md mx-auto mt-10 p-6 border rounded shadow">
