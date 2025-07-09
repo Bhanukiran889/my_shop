@@ -45,7 +45,7 @@ router.post("/login", async (req, res) => {
     res
       .cookie("token", token, {
         httpOnly: true,
-        sameSite: "none",
+        sameSite: "Lax", // Use 'strict' if you want to restrict cross-site requests
         secure: process.env.NODE_ENV === "production", // set true on render
         maxAge: 24 * 60 * 60 * 1000,
       })
