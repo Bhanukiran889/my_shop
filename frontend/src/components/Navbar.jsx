@@ -8,7 +8,7 @@ const Navbar = () => {
 
   const handleLogout = async () => {
   try {
-    await fetch("http://localhost:5000/api/auth/logout", {
+    await fetch("/auth/logout", {
       method: "POST",
       credentials: "include", // required to send cookies
     });

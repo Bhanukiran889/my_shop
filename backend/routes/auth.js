@@ -44,11 +44,11 @@ router.post("/login", async (req, res) => {
     res
       .cookie("token", token, {
         httpOnly: true,
-        sameSite: "none", // Strict is too aggressive; Lax works well for most apps
-        secure: process.env.NODE_ENV === "production", // true only in production (HTTPS)
-        maxAge: 24 * 60 * 60 * 1000, // 1 day
+        sameSite: "none",
+        secure: process.env.NODE_ENV === "production", 
+        maxAge: 24 * 60 * 60 * 1000, 
       })
-      .json({ role: user.role }); // Optional: send role to frontend
+      .json({ role: user.role }); 
   } catch (error) {
     res.status(500).json({ error: "Login error" });
   }
